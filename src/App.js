@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import Home from './Screens/Home/Home';
 import Subjects from './Screens/Subjects/Subjects';
 import Courses from './Screens/Courses/Courses';
+import Rooms from './Screens/Rooms/Rooms';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/subjects" element={<Subjects/>} />
+            <Route path="/rooms" element={<Rooms/>} />
           </Routes>
         </Router>
       </PersistGate>

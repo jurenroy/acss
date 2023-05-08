@@ -43,6 +43,9 @@ function Subjects() {
   );
 
   const createTable = () => {
+    if (selectedCourse === '' || selectedYear ==='' || selectedSemester ===''){
+      alert("can't create when there is null")
+    }
     dispatch(addTable({ course: selectedCourse, year: selectedYear, semester: selectedSemester, subjects: [] }));
   }
 
