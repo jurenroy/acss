@@ -50,10 +50,15 @@ function Subjects() {
     dispatch(removeTable({ course: selectedCourse, year: selectedYear, semester: selectedSemester }));
   }
 
+  const handleButtonClick = () => {
+    console.log(subjects);
+  };
+
   return (
     <div>
       <h1>Welcome to my website!</h1>
       <p>This is the subjects page.</p>
+      <button onClick={handleButtonClick}>Log Array</button>
       <div>
         <label>Course:</label>
         <select value={selectedCourse} onChange={handleCourseChange}>
@@ -89,6 +94,8 @@ function Subjects() {
           )}
 
           <button onClick={createTable}>Create Table</button>
+          <button onClick={removeTableSubjects}>Delete Table</button>
+
           <br></br>
           {selectedSemester && (
   <>
@@ -119,7 +126,7 @@ function Subjects() {
             <input type="text" value={subjectNameInput} onChange={e => setSubjectNameInput(e.target.value)} placeholder="Subject Name" />
           </td>
           <td>
-            <button onClick={() => dispatch(addSubject({ code: subjectCodeInput, name: subjectNameInput }))}>
+            <button onClick={() => dispatch(addSubject({ code: subjectCodeInput, name: subjectNameInput })) }>
               Add Subject
             </button>
           </td>
@@ -137,6 +144,10 @@ function Subjects() {
 
         </>
       )}
+      <button onClick={() => {
+        const { code } = {code: 'IT111', name: 'Introduction to Computing', subjects: Array(14)};
+        dispatch(removeTable({ course: subjects[0].course, year: subjects[0].year, semester: subjects[0].semester }));       
+      }}>remove that shit</button>
     </div>
   );
 }
