@@ -5,29 +5,16 @@ const SubjectsSlice = createSlice({
   initialState: [],
   reducers: {
     addSubject: (state, action) => {
-        const { subject, course, year, semester } = action.payload;
-        const table = state.find(table => table.course === course && table.year === year && table.semester === semester);
-        if (!table) {
-          return state;
-        }
-        if (!table.subjects) {
-          table.subjects = [];
-          state.splice(state.indexOf(table), 1, table); // update the state with the updated table object
-        }
-        table.subjects.push(subject);
+        const { index, code, name } = action.payload;
+        const subjectToUpdate = state[index];
+        subjectToUpdate.subjects.push({ code, name });
+      },          
+      removeSubject: (state, action) => {
+        const { courseIndex, subjectIndex } = action.payload;
+        const courseToUpdate = state.find(course => course.courseIndex === courseIndex);
+        courseToUpdate.subjects.splice(subjectIndex, 1);
       },
       
-      removeSubject: (state, action) => {
-        const { tableIndex, subject } = action.payload;
-        const table = state[tableIndex];
-        if (!table || !table.subjects) {
-          return state;
-        }
-        const subjectIndex = table.subjects.findIndex(s => s === subject);
-        if (subjectIndex !== -1) {
-          table.subjects.splice(subjectIndex, 1);
-        }
-      },
     addTable: (state, action) => {
         const { course, year, semester } = action.payload;
         const existingTable = state.find(table => table.course === course && table.year === year && table.semester === semester);

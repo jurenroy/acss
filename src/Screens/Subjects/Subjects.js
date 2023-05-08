@@ -27,9 +27,10 @@ function Subjects() {
     setSelectedSemester(event.target.value);
   };
 
-  const handleDeleteSubject = (index) => {
-    dispatch(removeSubject(index));
-  }
+  const handleDeleteSubject = (courseIndex, subjectIndex) => {
+    dispatch(removeSubject({ courseIndex, subjectIndex }));
+  };
+  
 
   const matchingTable = subjects.find(
     subject =>
@@ -53,6 +54,16 @@ function Subjects() {
   const handleButtonClick = () => {
     console.log(subjects);
   };
+
+  const handleAddSubject = () => {
+    const index = subjects.findIndex(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester);
+    if (index !== -1) {
+      dispatch(addSubject({ index, code: subjectCodeInput, name: subjectNameInput }));
+    }
+    setSubjectCodeInput("");
+    setSubjectNameInput("");
+  }
+  
 
   return (
     <div>
@@ -92,62 +103,68 @@ function Subjects() {
               </select>
             </div>
           )}
-
           <button onClick={createTable}>Create Table</button>
           <button onClick={removeTableSubjects}>Delete Table</button>
-
           <br></br>
-          {selectedSemester && (
-  <>
-    <table>
-      <tbody>
-        {subjects.filter(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester).map((subject, index) => (
-          <tr key={index}>
-            <td>{subject.course}</td>
-            <td>{subject.year} - </td>
-            <td>{subject.semester}</td>
-          </tr>
-        ))}
-      </tbody>
-      
-
-      <thead>
-        <tr>
-          <th>Code</th>
-          <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <input type="text" value={subjectCodeInput} onChange={e => setSubjectCodeInput(e.target.value)} placeholder="Subject Code" />
-          </td>
-          <td>
-            <input type="text" value={subjectNameInput} onChange={e => setSubjectNameInput(e.target.value)} placeholder="Subject Name" />
-          </td>
-          <td>
-            <button onClick={() => dispatch(addSubject({ code: subjectCodeInput, name: subjectNameInput })) }>
-              Add Subject
-            </button>
-          </td>
-        </tr>
-        {subjects.filter(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester).map((subject, index) => (
-          <tr key={index}>
-            <td>{subject.code}</td>
-            <td>{subject.name}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </>
-)}
-
+          {selectedSemester && selectedCourse && selectedYear && (
+            <>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Year</th>
+                    <th>Semester</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subjects.filter(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester).map((subject, index) => (
+                    <tr key={index}>
+                      <td>{subject.course}</td>
+                      <td>{subject.year} - </td>
+                      <td>{subject.semester}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Subject Code</th>
+                    <th>Subject Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subjects.filter(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester).map((subject, index) => (
+                    <tr key={index}>
+                      <td>
+                        <input type="text" value={subjectCodeInput} onChange={e => setSubjectCodeInput(e.target.value)} placeholder="Subject Code" />
+                      </td>
+                      <td>
+                        <input type="text" value={subjectNameInput} onChange={e => setSubjectNameInput(e.target.value)} placeholder="Subject Name" />
+                      </td>
+                      <td>
+                        <button onClick={() => handleAddSubject(index, subjectCodeInput, subjectNameInput)}>
+                          Add Subject
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {subjects && subjects.filter(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester).map((subject, courseIndex) => (
+                    subject.subjects.map((sub, subjectIndex) => (
+                      <tr key={subjectIndex}>
+                        <td>{sub.code}</td>
+                        <td>{sub.name}</td>
+                        <td><button onClick={() => handleDeleteSubject(courseIndex, subjectIndex)}>Delete</button></td>
+                      </tr>
+                    ))
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
         </>
       )}
-      <button onClick={() => {
-        const { code } = {code: 'IT111', name: 'Introduction to Computing', subjects: Array(14)};
-        dispatch(removeTable({ course: subjects[0].course, year: subjects[0].year, semester: subjects[0].semester }));       
-      }}>remove that shit</button>
     </div>
   );
 }
