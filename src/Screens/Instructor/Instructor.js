@@ -97,7 +97,7 @@ function Instructors() {
                       <td>
                         {sub.code} - {sub.name}
                         {instructors.some((pair) => pair.subject === `${sub.code} - ${sub.name}`) ? (
-                          <button onClick={() => handleUnsetInstructorPair(sub)}>Remove Instructor</button>
+                          <button onClick={() => handleSelectSubject(sub)}>Select</button>
                         ) : (
                           <button onClick={() => handleSelectSubject(sub)}>Select</button>
                         )}
