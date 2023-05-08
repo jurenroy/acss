@@ -27,12 +27,12 @@ function Rooms() {
       <h1>Welcome to my website!</h1>
       <p>This is the rooms page.</p>
       <input type="text" value={roomInput} onChange={handleInputChange} />
-      <button onClick={handleAddRoom}>Add Course</button>
+      <button onClick={handleAddRoom}>Add Room</button>
       <table>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Course</th>
+            <th>Room</th>
             <th>Action</th>
           </tr>
         </thead>
