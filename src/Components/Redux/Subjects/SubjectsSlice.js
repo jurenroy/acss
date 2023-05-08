@@ -11,9 +11,12 @@ const SubjectsSlice = createSlice({
       },          
       removeSubject: (state, action) => {
         const { courseIndex, subjectIndex } = action.payload;
-        const courseToUpdate = state.find(course => course.courseIndex === courseIndex);
-        courseToUpdate.subjects.splice(subjectIndex, 1);
-      },
+        const courseToUpdate = state[courseIndex];
+        if (courseToUpdate && courseToUpdate.subjects) {
+          courseToUpdate.subjects.splice(subjectIndex, 1);
+        }
+    },
+                
       
     addTable: (state, action) => {
         const { course, year, semester } = action.payload;

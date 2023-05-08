@@ -11,6 +11,10 @@ function Subjects() {
   const [selectedSemester, setSelectedSemester] = useState('');
   const [subjectCodeInput, setSubjectCodeInput] = useState('');
   const [subjectNameInput, setSubjectNameInput] = useState('');
+
+  const indexxx = subjects.findIndex((subject) => 
+    subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester
+    );
   
   const handleCourseChange = event => {
     setSelectedCourse(event.target.value);
@@ -30,7 +34,6 @@ function Subjects() {
   const handleDeleteSubject = (courseIndex, subjectIndex) => {
     dispatch(removeSubject({ courseIndex, subjectIndex }));
   };
-  
 
   const matchingTable = subjects.find(
     subject =>
@@ -69,7 +72,7 @@ function Subjects() {
     <div>
       <h1>Welcome to my website!</h1>
       <p>This is the subjects page.</p>
-      <button onClick={handleButtonClick}>Log Array</button>
+      {/* <button onClick={handleButtonClick}>Log Array</button> */}
       <div>
         <label>Course:</label>
         <select value={selectedCourse} onChange={handleCourseChange}>
@@ -150,15 +153,18 @@ function Subjects() {
                       </td>
                     </tr>
                   ))}
-                  {subjects && subjects.filter(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester).map((subject, courseIndex) => (
-                    subject.subjects.map((sub, subjectIndex) => (
-                      <tr key={subjectIndex}>
-                        <td>{sub.code}</td>
-                        <td>{sub.name}</td>
-                        <td><button onClick={() => handleDeleteSubject(courseIndex, subjectIndex)}>Delete</button></td>
-                      </tr>
+                  {subjects && subjects
+                    .filter(subject => subject.course === selectedCourse && subject.year === selectedYear && subject.semester === selectedSemester)
+                    .map((subject, courseIndex) => (
+                      subject.subjects.map((sub, subjectIndex) => (
+                        <tr key={subjectIndex}>
+                          <td>{sub.code}</td>
+                          <td>{sub.name}</td>
+                          <td><button onClick={() => handleDeleteSubject(indexxx, subjectIndex)}>Delete</button></td>
+                        </tr>
+                      ))
                     ))
-                  ))}
+                  }
                 </tbody>
               </table>
             </>
