@@ -4,11 +4,14 @@ import { setInstructorPair, unsetInstructorPair } from '../../Components/Redux/I
 
 function Instructors() {
   const dispatch = useDispatch();
-  const subjects = useSelector((state) => state.subjects);
-  const instructors = useSelector((state) => state.instructors);
+  const courses = useSelector((state) => state.courses)
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [instructorInput, setInstructorInput] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('');
+  const subjects = useSelector((state) => state.subjects.filter((subject) => subject.course === selectedCourse && subject.semester === selectedSemester));
+  const instructors = useSelector((state) => state.instructors.filter((instructor) => instructor.course === selectedCourse && instructor.semester === selectedSemester));
 
   const filteredSubjects = subjects.filter(
     (subject) =>
@@ -27,8 +30,16 @@ function Instructors() {
     setSelectedSubject(subject);
   };
 
+  const handleCourseChange = (e) => {
+    setSelectedCourse(e.target.value);
+  };
+
+  const handleSemesterChange = event => {
+    setSelectedSemester(event.target.value);
+  };
+
   const handleSetInstructorPair = () => {
-    dispatch(setInstructorPair({ instructor: instructorInput, subject: `${selectedSubject.code} - ${selectedSubject.name}` }));
+    dispatch(setInstructorPair({ instructor: instructorInput, subject: `${selectedSubject.code} - ${selectedSubject.name}`, course: selectedCourse, semester: selectedSemester }));
     setSelectedSubject(null);
     setInstructorInput('');
   };
@@ -71,6 +82,21 @@ function Instructors() {
     <div>
       <h1>Welcome to my website!</h1>
       <p>This is the instructors page.</p>
+      <label>Course:</label>
+      <select value={selectedCourse} onChange={handleCourseChange}>
+        <option value="">Select Course</option>
+        {courses.map((course) => (
+          <option value={course} key={course}>
+            {course}
+          </option>
+        ))}
+      </select>
+      <label>Semester:</label>
+      <select value={selectedSemester} onChange={handleSemesterChange}>
+        <option value="">Select Semester</option>
+        <option value="First Semester">First Semester</option>
+        <option value="Second Semester">Second Semester</option>
+      </select>
       <p>Search Subject.</p>
       <input
         type="text"
@@ -83,6 +109,7 @@ function Instructors() {
           <thead>
             <tr>
               <th>Subject</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -96,7 +123,9 @@ function Instructors() {
                     <tr key={`${index}-${subIndex}`}>
                       <td>
                         {sub.code} - {sub.name}
-                        {instructors.some((pair) => pair.subject === `${sub.code} - ${sub.name}`) ? (
+                      </td>
+                      <td>
+                      {instructors.some((pair) => pair.subject === `${sub.code} - ${sub.name}`) ? (
                           <button onClick={() => handleSelectSubject(sub)}>Select</button>
                         ) : (
                           <button onClick={() => handleSelectSubject(sub)}>Select</button>
